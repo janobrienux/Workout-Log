@@ -12,6 +12,9 @@ const Workout = db.define('workout', {
     results: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    owner_id: {
+        type: DataTypes.INTEGER,
     }
 });
-module.exports = Workout
+module.exports = Workout;

@@ -1,12 +1,14 @@
 const router = require('express').Router();
 const {User} = require('../models');
+
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+
 const { UniqueConstraintError } = require('sequelize/lib/errors');
 // ********** SIGN UP ********** //
 router.post('/register', async (req, res) => {
     // Object deconstructing to separate data when sent in the body
-    let {userName,password} = req.body;
+    let {userName, password} = req.body;
     try {
     const newUser = await User.create({
         userName,

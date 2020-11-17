@@ -9,21 +9,41 @@ const validateSession = require('../middleware/validateSession');
 //         error: err
 //     }))
 // })
-router.post('/create' async (req, res) => {
+router.post('/', async (req, res) => {
     try {
         const {description, definition, results} = req.body;
+        const owner_id = req.user.id;
+        
         let newWorkout = await Workout.create({
-            description, definition, results, owner_id: req.user.id
+            description, definition, results, owner_id: owner_id
         });
+        // let newWorkout = await Workout.create({
+        //     description, definition, results
+        // });
         res.status(200).json({
             workout: newWorkout,
-            message: "Workout logged!"
+            message: 'Workout logged!'
         })
     } catch (error) {
         console.log(error);
         res.status(500).json({
-            message: "Workout failed to log."
+            message: 'Workout failed to log.'
         })
     }
-});
+}
+);
+
+router.get("/", (req, res) => {
+    Workout.findAll()
+      .then((workouts) => res.status(200).json(workouts))
+      .catch((err) => res.status(500).json({ error: err }));
+  });
+  router.get("/mine", validateSession, (req, res) => {
+    let userid = req.user.id;
+    Workout.findAll({
+      where: { owner: userid },
+    })
+      .then((workoutss) => res.starus(200).json(workouts))
+      .catch((err) => res.status(500).json({ error: err }));
+  });
 module.exports = router;
